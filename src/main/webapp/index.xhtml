@@ -1,0 +1,123 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+        <title>corredor</title>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+    </h:head>
+
+    <h:body>
+        <center>
+            <div id="banner" class="section-padding">
+                <h:form id="datos" style="width: 100%">
+                    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage value="/img/loader.gif" />
+                    </p:dialog>
+                    <p:growl id="msj" showDetail="true" sticky="true" autoUpdate="true"/> 
+                    <div class="container">
+                        <div class="row" style="width: 40%">
+                            <div class="jumbotron">
+                                <h1 class="small"><span class="bold">Oasys</span></h1>
+                                <p class="big"><strong>Solución Tecnológica</strong></p>
+                            </div>
+                            <br/>
+
+
+
+                            <p:fileUpload value="#{uiCorreo.file}" mode="advanced" label="Seleccionar Adjunto"
+                                          fileUploadListener="#{uiCorreo.cargarAdjunto}"
+                                          auto="true"  process="@this" update="pgArchivo dtClientes"
+                                          />
+                            <br/>
+
+                            <p:commandButton value="Notificar Correo" action="#{uiCorreo.enviar()}" update="@form"/>
+                            <p:commandButton value="Limpiar" action="#{uiCorreo.limpiar()}" update="@form" immediate="true"/>
+
+                            <br/>
+
+                        </div>
+                    </div>
+                    <br/>
+                    <center>
+                        <h:panelGrid id="pgArchivo" style="color: #fff; font-size: 20px; font-weight: bold;
+                                     "  >
+                            <p:outputLabel value="Archivo Procesando" rendered="#{not empty uiCorreo.file.fileName}"/>
+                            <p:outputLabel value="#{uiCorreo.file.fileName}" rendered="#{not empty uiCorreo.file.fileName}"/>
+                        </h:panelGrid>
+                        <br/>
+                        <h:panelGroup id="pgOrigen">
+
+                            <h:panelGrid style="font-family: 'Raleway', sans-serif;
+                                         font-size: large;
+                                         text-align: center;"  columns="2">
+                                <p:inputText value="#{uiCorreo.correo}" placeholder="Correo Origen"/>
+                                <p:password value="#{uiCorreo.clave}" placeholder="Clave Correo"/>
+                            </h:panelGrid>
+
+                            <br/>
+                            <h:panelGrid style="font-family: Verdana, Arial, Helvetica, sans-serif;
+                                         font-size: medium;
+                                         text-align: center;
+                                         "  columns="1">
+                                <p:inputText value="#{uiCorreo.asunto}" placeholder="asunto" style="width: 100%"/>
+                                <p:inputTextarea value="#{uiCorreo.texto}" placeholder="texto" cols="60" rows="10" />  
+                            </h:panelGrid>
+                        </h:panelGroup>
+                    </center>
+                    <br/>
+                    <p:dataTable id="dtClientes" value="#{uiCorreo.mensajeList}" var="varMensaje" emptyMessage="Cargar la información."
+                                 widgetVar="mensajeTable" rows="10" paginator="true"
+                                 style="font-family: Verdana, Arial, Helvetica, sans-serif;
+                                 font-size:x-small;
+                                 text-align: center; width: 95%"
+                                 rowHover="true">
+                        <f:facet name="header">
+                            Clientes a notificar
+                        </f:facet>
+                        <p:columnGroup type="header">  
+                            <p:row>  
+                                <p:column  headerText="Opciones"  width="5%"/>
+                                <p:column headerText="Nombre" filterBy="#{varMensaje.nombre}" />
+                                <p:column headerText="Destino" filterBy="#{varMensaje.correo}"/>
+                                <p:column headerText="Adjunto" filterBy="#{varMensaje.adjunto}" />
+                                <p:column headerText="Procesado" width="10%"/>
+                            </p:row> 
+                        </p:columnGroup>
+
+                        <p:column>
+                            <center>
+                                <p:commandButton icon="ui-icon-trash" title="Eliminar" >
+                                    <p:confirm header="Eliminar Cliente" message="Desea eliminar el cliente?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                            </center>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{varMensaje.nombre}"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{varMensaje.correo}"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{varMensaje.adjunto}"/>
+                        </p:column>
+                        <p:column>
+                            <center>
+                                <p:inputSwitch value="#{varMensaje.notificado}"  onLabel="SI" offLabel="NO"/>
+                            </center>
+                        </p:column>
+                    </p:dataTable>
+                    <br/>
+
+
+                </h:form>
+            </div>
+
+
+
+        </center>
+    </h:body>
+</html>
