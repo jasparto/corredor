@@ -34,6 +34,7 @@ public class UICorreo {
     private String clave;
     private String texto;
     private String asunto;
+    private String host;
 
     /**
      * @return the file
@@ -189,6 +190,20 @@ public class UICorreo {
      */
     public void setAsunto(String asunto) {
         this.asunto = asunto;
+    }
+
+    /**
+     * @return the host
+     */
+    public String getHost() {
+        return host;
+    }
+
+    /**
+     * @param host the host to set
+     */
+    public void setHost(String host) {
+        this.host = host;
     }
 
 }

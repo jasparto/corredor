@@ -39,6 +39,8 @@ public class GestorMensaje {
         props.put("mail.smtp.starttls.enable", "true");
 //        props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.host", "smtp-mail.outlook.com");
+//        props.put("mail.smtp.host", "smtp.office365.com");
+
         props.put("mail.smtp.port", "587");
 
         Session session = Session.getInstance(props,
@@ -91,6 +93,7 @@ public class GestorMensaje {
         } catch (MessagingException e) {
 
             UtilMSG.addErrorMsg("Error al enviar el correo " + m.getNombre() + " - " + e.getMessage());
+            e.printStackTrace();
             return Boolean.FALSE;
         }
     }
