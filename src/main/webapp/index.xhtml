@@ -34,7 +34,8 @@
                                           />
                             <br/>
 
-                            <p:commandButton value="Notificar Correo" action="#{uiCorreo.enviar()}" update="@form"/>
+                            <p:commandButton value="Notificar Correo" action="#{uiCorreo.enviar()}" update="@form"
+                                             onclick="blur()"/>
                             <p:commandButton value="Limpiar" action="#{uiCorreo.limpiar()}" update="@form" immediate="true"/>
 
                             <br/>
@@ -51,20 +52,27 @@
                         <br/>
                         <h:panelGroup id="pgOrigen">
 
-                            <h:panelGrid style="font-family: 'Raleway', sans-serif;
+                            <p:panelGrid style="font-family: 'Raleway', sans-serif; border-radius: 40px;
                                          font-size: large;
-                                         text-align: center;"  columns="2">
+                                         text-align: center;" columns="3" >
+                                <p:selectOneMenu value="#{uiCorreo.host}" style="width:125px; font-size: 12px;">
+                                    <f:selectItem itemLabel="Outlook" itemValue="smtp-mail.outlook.com" />
+                                    <f:selectItem itemLabel="Office365" itemValue="smtp.office365.com" />
+                                    <f:selectItem itemLabel="Gmail" itemValue="smtp.gmail.com" />
+                                </p:selectOneMenu>
                                 <p:inputText value="#{uiCorreo.correo}" placeholder="Correo Origen"/>
                                 <p:password value="#{uiCorreo.clave}" placeholder="Clave Correo"/>
-                            </h:panelGrid>
+                            </p:panelGrid>
 
                             <br/>
                             <h:panelGrid style="font-family: Verdana, Arial, Helvetica, sans-serif;
-                                         font-size: medium;
-                                         text-align: center;
-                                         "  columns="1">
+                                         font-size: medium; text-align: center;"
+                                         columns="1">
                                 <p:inputText value="#{uiCorreo.asunto}" placeholder="asunto" style="width: 100%"/>
-                                <p:inputTextarea value="#{uiCorreo.texto}" placeholder="texto" cols="60" rows="10" />  
+
+                                <p:editor id="edTexto" widgetVar="editorWidgetLock" value="#{uiCorreo.texto}" style="width: 100%;" />
+                                <p:outputLabel for="edTexto" value="$USER → Nombre adjunto en el primer campo del plano"
+                                               style="color: white"/>
                             </h:panelGrid>
                         </h:panelGroup>
                     </center>

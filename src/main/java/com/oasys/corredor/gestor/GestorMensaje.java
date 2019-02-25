@@ -7,14 +7,10 @@ package com.oasys.corredor.gestor;
 
 import com.oasys.corredor.modelo.Mensaje;
 import com.oasys.util.UtilMSG;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Properties;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -31,14 +27,16 @@ import javax.mail.internet.MimeMultipart;
  */
 public class GestorMensaje {
 
-    public Boolean enviar(Mensaje m, String mensaje, String asunto, String correo, String clave) {
+
+    public Boolean enviar(Mensaje m, String mensaje, String asunto, String correo, String clave, String host) {
 
         //tls
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
 //        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.host", "smtp-mail.outlook.com");
+//        props.put("mail.smtp.host", "smtp-mail.outlook.com");
+        props.put("mail.smtp.host", host);
 //        props.put("mail.smtp.host", "smtp.office365.com");
 
         props.put("mail.smtp.port", "587");
@@ -56,37 +54,45 @@ public class GestorMensaje {
             Message message = new MimeMessage(session);
 //            message.setFrom(new InternetAddress("oasys.scon@gmail.com"));
             message.setFrom(new InternetAddress(correo));
+
+            String correos = "";
+            String[] d = m.getCorreo().split(":");
+            for (String s : d) {
+                correos += s + ",";
+            }
+
             message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(m.getCorreo()));
+                    InternetAddress.parse(correos));
             message.setSubject(asunto);
 //            message.setContent(mensaje, "text/html; charset=utf-8");
 
-            // Create the message part
-            BodyPart messageBodyPart = new MimeBodyPart();
-            // Now set the actual message
-            messageBodyPart.setContent(mensaje, "text/html; charset=utf-8");
+            String[] a = m.getAdjunto().split(":");
             // Create a multipar message
             Multipart multipart = new MimeMultipart();
-            // Set text message part
-            multipart.addBodyPart(messageBodyPart);
+            for (String s : a) {
 
-            messageBodyPart = new MimeBodyPart();
-            String filename = "c:\\adjunto\\" + m.getAdjunto();
-            DataSource source = new FileDataSource(filename);
-            messageBodyPart.setDataHandler(new DataHandler(source));
-            messageBodyPart.setFileName(m.getAdjunto());
-            multipart.addBodyPart(messageBodyPart);
-            // Send the complete message parts
+                // Create the message part
+                BodyPart messageBodyPart = new MimeBodyPart();
+                // Now set the actual message
+                messageBodyPart.setContent(mensaje, "text/html; charset=utf-8");
+
+                // Set text message part
+                multipart.addBodyPart(messageBodyPart);
+
+                messageBodyPart = new MimeBodyPart();
+//                String filename = "c:\\adjunto\\" + m.getAdjunto();
+                String filename = "c:\\adjunto\\" + s;
+                DataSource source = new FileDataSource(filename);
+                messageBodyPart.setDataHandler(new DataHandler(source));
+//                messageBodyPart.setFileName(m.getAdjunto());
+                messageBodyPart.setFileName(s);
+                multipart.addBodyPart(messageBodyPart);
+                // Send the complete message parts
+
+            }
+
             message.setContent(multipart);
 
-//            message.setText(
-//                     "Cordial Saludo\n\n"
-//                    + "Contacto.\n\n"
-//                    + "[Contacto] JULIAN DAVID OSORIO GONZALEZ\n"
-//                    + "Cargo: INGENIERO DESARROLLO\n"
-//                    + "Cédula: 1093215489\n"
-//                    + "\n\n Cordialmente \n Julian David Osorio Gonzalez"
-//            );
             Transport.send(message);
             System.out.println("Done");
             return Boolean.TRUE;

@@ -32,9 +32,13 @@ public class UICorreo {
     private String correo;
     private String usuario;
     private String clave;
-    private String texto;
+    private String texto = "<div>"
+            + "<p>Estimado <b>$USER</b></p>"
+            + "<p>Adjunto le envío su informe diario</p>"
+            + "<p>Saludos</p>"
+            + "</div>";
     private String asunto;
-    private String host;
+    private String host = "smtp-mail.outlook.com";
 
     /**
      * @return the file
@@ -86,13 +90,14 @@ public class UICorreo {
 
             GestorMensaje gestorMensaje = new GestorMensaje();
 
-            for (Mensaje m : mensajeList) {
+            mensajeList.forEach((m) -> {
                 String textoUsuario = texto;
                 if (!m.getNotificado()) {
                     textoUsuario = textoUsuario.replace("$USER", m.getNombre());
-                    m.setNotificado(gestorMensaje.enviar(m, textoUsuario, asunto, correo, clave));
+                    m.setNotificado(gestorMensaje.enviar(m, textoUsuario, asunto, correo, clave, host));
                 }
-            }
+            });
+            UtilMSG.addSuccessMsg("Proceso completado");
 
         } catch (Exception e) {
             if (UtilLog.causaControlada(e)) {
