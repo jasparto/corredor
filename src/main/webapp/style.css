@@ -1,4 +1,11 @@
 
+.RowCenter {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: small;
+    text-align: center;
+    alignment-baseline: middle;
+}
+
 /**************************************
 CSS RESET
 **************************************/

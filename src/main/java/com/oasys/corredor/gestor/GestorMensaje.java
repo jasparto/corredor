@@ -27,7 +27,6 @@ import javax.mail.internet.MimeMultipart;
  */
 public class GestorMensaje {
 
-
     public Boolean enviar(Mensaje m, String mensaje, String asunto, String correo, String clave, String host) {
 
         //tls
@@ -67,18 +66,26 @@ public class GestorMensaje {
 //            message.setContent(mensaje, "text/html; charset=utf-8");
 
             String[] a = m.getAdjunto().split(":");
+
             // Create a multipar message
             Multipart multipart = new MimeMultipart();
+
+            // Create the message part
+            // Now set the actual message
+//            messageBodyPart.setContent(mensaje, "text/html; charset=utf-8");
+//            MimeBodyPart textPart = new MimeBodyPart();
+//            textPart.setText(mensaje, "utf-8", "text/html; charset=utf-8");
+//
+            MimeBodyPart htmlPart = new MimeBodyPart();
+            htmlPart.setContent(mensaje, "text/html; charset=utf-8");
+
+//            multipart.addBodyPart(textPart); // <-- first
+            multipart.addBodyPart(htmlPart); // <-- second
+
+            // Set text message part
+//            multipart.addBodyPart(messageBodyPart);
+            BodyPart messageBodyPart = null;
             for (String s : a) {
-
-                // Create the message part
-                BodyPart messageBodyPart = new MimeBodyPart();
-                // Now set the actual message
-                messageBodyPart.setContent(mensaje, "text/html; charset=utf-8");
-
-                // Set text message part
-                multipart.addBodyPart(messageBodyPart);
-
                 messageBodyPart = new MimeBodyPart();
 //                String filename = "c:\\adjunto\\" + m.getAdjunto();
                 String filename = "c:\\adjunto\\" + s;
@@ -88,11 +95,9 @@ public class GestorMensaje {
                 messageBodyPart.setFileName(s);
                 multipart.addBodyPart(messageBodyPart);
                 // Send the complete message parts
-
             }
 
             message.setContent(multipart);
-
             Transport.send(message);
             System.out.println("Done");
             return Boolean.TRUE;

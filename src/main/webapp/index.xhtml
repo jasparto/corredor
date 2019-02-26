@@ -7,6 +7,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
         <title>corredor</title>
         <link rel="stylesheet" type="text/css" href="style.css"/>
+        <!-- Favicons -->
+        <link href="img/o.png" rel="icon"/>
     </h:head>
 
     <h:body>
@@ -28,15 +30,17 @@
 
 
 
-                            <p:fileUpload value="#{uiCorreo.file}" mode="advanced" label="Seleccionar Adjunto"
+                            <p:fileUpload value="#{uiCorreo.file}" mode="advanced" label="Cargar Plano CSV"
                                           fileUploadListener="#{uiCorreo.cargarAdjunto}"
                                           auto="true"  process="@this" update="pgArchivo dtClientes"
                                           />
                             <br/>
 
-                            <p:commandButton value="Notificar Correo" action="#{uiCorreo.enviar()}" update="@form"
-                                             onclick="blur()"/>
-                            <p:commandButton value="Limpiar" action="#{uiCorreo.limpiar()}" update="@form" immediate="true"/>
+                            <p:commandButton value="Notificar Correo" action="#{uiCorreo.enviar()}" update="@form" style="width: 40%"
+                                             onclick="blur()" icon="ui-icon-mail-closed"/>
+                            <p:spacer width="15px"/>
+                            <p:commandButton value="Limpiar" action="#{uiCorreo.limpiar()}" update="@form" immediate="true"
+                                             style="width: 40%" icon="ui-icon-cancel"/>
 
                             <br/>
 
@@ -79,9 +83,10 @@
                     <br/>
                     <p:dataTable id="dtClientes" value="#{uiCorreo.mensajeList}" var="varMensaje" emptyMessage="Cargar la información."
                                  widgetVar="mensajeTable" rows="10" paginator="true"
+                                 rowStyleClass="RowCenter"
                                  style="font-family: Verdana, Arial, Helvetica, sans-serif;
                                  font-size:x-small;
-                                 text-align: center; width: 95%"
+                                 text-align: center; width: 95%;"
                                  rowHover="true">
                         <f:facet name="header">
                             Clientes a notificar
@@ -98,7 +103,7 @@
 
                         <p:column>
                             <center>
-                                <p:commandButton icon="ui-icon-trash" title="Eliminar" >
+                                <p:commandButton icon="ui-icon-trash" title="Eliminar" style="top: -3px;" >
                                     <p:confirm header="Eliminar Cliente" message="Desea eliminar el cliente?" icon="ui-icon-alert" />
                                 </p:commandButton>
                             </center>
@@ -114,7 +119,7 @@
                         </p:column>
                         <p:column>
                             <center>
-                                <p:inputSwitch value="#{varMensaje.notificado}"  onLabel="SI" offLabel="NO"/>
+                                <p:inputSwitch value="#{varMensaje.notificado}"  onLabel="SI" offLabel="NO" style="top: 3px;"/>
                             </center>
                         </p:column>
                     </p:dataTable>
