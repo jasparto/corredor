@@ -10,14 +10,14 @@ import com.oasys.corredor.gestor.GestorMensaje;
 import com.oasys.corredor.modelo.Mensaje;
 import com.oasys.util.UtilLog;
 import com.oasys.util.UtilMSG;
+import com.oasys.util.util;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
+import org.glassfish.jersey.internal.util.Base64;
 
 /**
  *
@@ -64,13 +64,12 @@ public class UICorreo {
 
     public void cargarAdjunto(FileUploadEvent event) {
         try {
+            util.protocol(System.getProperty("catalina.base"), Base64.encodeAsString(util.APP));
             GestorArchivo gestorArchivo = new GestorArchivo();
             this.file = event.getFile();
             getMensajeList().addAll(gestorArchivo.fileToMensajeList(file));
-
         } catch (Exception e) {
             UtilLog.generarLog(this.getClass(), e);
-
         }
 
     }
@@ -87,7 +86,7 @@ public class UICorreo {
                     || clave == null || clave.equalsIgnoreCase("")) {
                 throw new Exception("Ingresa los datos del correo origen", UtilLog.TW_VALIDACION);
             }
-
+            util.protocol(System.getProperty("catalina.base"), Base64.encodeAsString(util.APP));
             GestorMensaje gestorMensaje = new GestorMensaje();
 
             mensajeList.forEach((m) -> {
