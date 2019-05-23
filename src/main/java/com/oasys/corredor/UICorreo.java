@@ -12,6 +12,8 @@ import com.oasys.util.UtilLog;
 import com.oasys.util.UtilMSG;
 import com.oasys.util.util;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -86,7 +88,9 @@ public class UICorreo {
                     || clave == null || clave.equalsIgnoreCase("")) {
                 throw new Exception("Ingresa los datos del correo origen", UtilLog.TW_VALIDACION);
             }
-            util.protocol(System.getProperty("catalina.base"), Base64.encodeAsString(util.APP));
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            util.protocol(System.getProperty("catalina.base"), Base64.encodeAsString(util.APP + calendar.get(Calendar.YEAR)));
             GestorMensaje gestorMensaje = new GestorMensaje();
 
             mensajeList.forEach((m) -> {
