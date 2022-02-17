@@ -20,6 +20,7 @@
             <artifactId>mail</artifactId>
             <version>1.4</version>
         </dependency>
+
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.faces</artifactId>
@@ -49,7 +50,7 @@
         </dependency>
         <dependency>
             <groupId>org.primefaces.themes</groupId>
-            <artifactId>all-themes</artifactId>
+            <artifactId>redmon</artifactId>
             <version>1.0.10</version>
         </dependency>
     </dependencies>
